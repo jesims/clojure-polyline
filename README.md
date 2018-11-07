@@ -3,14 +3,9 @@
 Decoding and encoding of the google polyline algorithm as described at
 https://developers.google.com/maps/documentation/utilities/polylinealgorithm
 
-# Releases
+[![CircleCI](https://circleci.com/gh/jesims/clojure-polyline.svg?style=svg)](https://circleci.com/gh/jesims/clojure-polyline)
 
-Current stable release is 0.4.0, which requires Clojure 1.7 or later.
-
-[Leiningen](https://github.com/technomancy/leiningen) dependency information:
-```clojure
-[com.michaelgaare/clojure-polyline "0.4.0"]
-```
+[![Clojars Project](https://img.shields.io/clojars/v/io.jesi/clojure-polyline.svg)](https://clojars.org/io.jesi/clojure-polyline)
 
 # Usage
 
@@ -43,6 +38,10 @@ latitude]` pairs as some systems expect, you can do:
 
 ## Changelog
 
+* Release 0.4.1 on 2018-11-07
+  * Support for ClojureScript
+  * 5 decimal place encode and decode (aligning with the google algorithm)
+
 * Release 0.4.0 on 2018-10-01
   * BREAKING CHANGE: the decode API now matches the encode API:
     encode was always `[[lat lon]] => String`, now decode is `String => [[lat lon]]`.
@@ -59,6 +58,10 @@ latitude]` pairs as some systems expect, you can do:
   * Minimum Clojure version is now 1.7 (because transducers)
   * The `encode` codepath completely rewritten to scrub out some of
     the wacky stuff I did 6 years ago. As a result it's 19x faster.
+
+## Contributors
+
+* [Alex Scott (AXRS)](https://github.com/axrs)
 
 ## License
 
