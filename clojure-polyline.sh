@@ -1,12 +1,8 @@
 #!/usr/bin/env bash
-cd $(realpath $(dirname $0))
-# TODO: Source and load from common repository
-if [ ! -f ./project.sh ]; then
-	echo "Downloading bash helper utilities"
-	curl -OL https://raw.githubusercontent.com/jesims/backpack/master/project.sh
-fi
-source ./project.sh
-if [[ $? -ne 0 ]]; then
+#shellcheck disable=2215
+cd "$(realpath "$(dirname "$0")")" &&
+source bindle/project.sh
+if [ $? -ne 0 ];then
 	exit 1
 fi
 
@@ -65,7 +61,7 @@ snapshot () {
 	else
 		version=$(cat VERSION)
 		snapshot="$version-SNAPSHOT"
-		echo ${snapshot} > VERSION
+		echo "${snapshot}" > VERSION
 		echo_message "Snapshotting $snapshot"
 		deploy
 		echo "$version" > VERSION
@@ -86,12 +82,9 @@ release () {
 	fi
 }
 
-if [[ "$#" -eq 0 ]] || [[ "$1" =~ ^(help|-h|--help)$ ]];then
-	usage
-	exit 1
-elif [[ $(grep "^$1\ (" "$script_name") ]];then
-	eval $@
-else
-	echo_error "Unknown function $1 ($script_name $@)"
-	exit 1
-fi
+## lint:
+lint () {
+	-lint
+}
+
+script-invoke "$@"
