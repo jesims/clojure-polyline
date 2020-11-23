@@ -51,33 +51,25 @@ deploy () {
 }
 
 ## snapshot:
+## args: [-l]
 ## Pushes a snapshot to Clojars
-snapshot () {
-	if is-snapshot;then
-		echo-message 'SNAPSHOT suffix already defined... Aborting'
-		exit 1
-	else
-		version=$(cat VERSION)
-		snapshot="$version-SNAPSHOT"
-		echo "${snapshot}" > VERSION
-		echo-message "Snapshotting $snapshot"
-		deploy
-		echo "$version" > VERSION
-	fi
+## [-l] local
+snapshot(){
+	-snapshot "$@"
 }
 
 ## release:
 ## Pushes a release to Clojars
 release () {
-	version=$(cat VERSION)
-	if ! is-snapshot;then
-		version=$(cat VERSION)
-		echo-message "Releasing $version"
-		deploy
-	else
-		echo-message 'SNAPSHOT suffix already defined... Aborting'
-		exit 1
-	fi
+	-release
+}
+
+deploy(){
+	deploy-clojars
+}
+
+deploy-snapshot(){
+	deploy-clojars
 }
 
 ## lint:
