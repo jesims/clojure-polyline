@@ -11,6 +11,7 @@
   :parent-project {:coords  [io.jesi/parent "4.3.0"]
                    :inherit [:plugins
                              :repositories
+                             :deploy-repositories
                              :managed-dependencies
                              :dependencies
                              :exclusions
