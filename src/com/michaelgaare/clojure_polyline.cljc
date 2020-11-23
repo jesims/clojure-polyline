@@ -1,6 +1,6 @@
 (ns com.michaelgaare.clojure-polyline
-  (:refer-clojure :exclude [str])
-  "Functions to encode and decode Google polyline algorithm.")
+  "Functions to encode and decode Google polyline algorithm."
+  (:refer-clojure :exclude [str]))
 
 (defn round [v]
   #?(:clj  (Math/round v)

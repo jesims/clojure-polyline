@@ -1,7 +1,7 @@
 (ns com.michaelgaare.clojure-polyline-test
   (:require
-    [io.jesi.customs.strict :refer [deftest is is= testing]]
-    [com.michaelgaare.clojure-polyline :as polyline]))
+    [com.michaelgaare.clojure-polyline :as polyline]
+    [io.jesi.customs.strict :refer [deftest is is= testing]]))
 
 (defn- round [d]
   (/ (polyline/round (* d polyline/precision)) polyline/precision))
