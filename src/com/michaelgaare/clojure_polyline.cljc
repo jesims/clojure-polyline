@@ -168,10 +168,11 @@
         (map encode-coord)))
 
 ;TODO Consider moving to Backpack if `clojure.core/str` is being a performance problem child
-(defn str
-  ([] "")
-  ([s] s)
-  ([s c] (append s c)))
+(def str #?(:clj  clojure.core/str
+            :cljs (fn str
+                    ([] (string-builder))
+                    ([s] s)
+                    ([s c] (append s c)))))
 
 (defn encode
   "Main polyline encoding function. Takes a collection of [lat long]
