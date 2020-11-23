@@ -1,9 +1,6 @@
 (ns com.michaelgaare.clojure-polyline
+  (:refer-clojure :exclude [str])
   "Functions to encode and decode Google polyline algorithm.")
-
-;; -------------------------------------------------------
-;; CLJC functions
-;; -------------------------------------------------------
 
 (defn round [v]
   #?(:clj  (Math/round v)
@@ -20,27 +17,22 @@
    CLJS: Appends a character to the string."
   [sb c]
   #?(:clj  (.append ^StringBuilder sb c)
-     :cljs (do
-             (.push sb c)
-             sb)))
+     ;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/concat#Performance
+     :cljs (cljs.core/+ sb c)))
 
 (defn- sb->str
   "CLJ: Converts the StringBuilder to a string.
    CLJS: Returns the given string"
   [sb]
   #?(:clj  (.toString ^StringBuilder sb)
-     :cljs (.join sb "")))
+     :cljs sb))
 
 (defn- string-builder
   "CLJ: Returns a new StringBuilder.
    CLJS: Returns an empty string."
   []
   #?(:clj  (StringBuilder.)
-     :cljs #js []))
-
-;; -------------------------------------------------------
-;; Utility functions
-;; -------------------------------------------------------
+     :cljs ""))
 
 (defn latlon
   "Converts a coordinate in [lon lat] format to [lat lon]."
@@ -51,10 +43,6 @@
   "Converts a coordinate in [lat lon] format to [lon lat]."
   [[lat lon :as coord]]
   [lon lat])
-
-;; -------------------------------------------------------
-;; Decode functions
-;; -------------------------------------------------------
 
 (def precision 1e5)
 
@@ -126,10 +114,6 @@
   [polystring]
   (into [] decoder polystring))
 
-;; -------------------------------------------------------
-;; Encode functions
-;; -------------------------------------------------------
-
 (defn- invert-negative [int]
   (if (neg? int)
     (bit-not int)
@@ -182,6 +166,12 @@
   (comp compress
         cat
         (map encode-coord)))
+
+;TODO Consider moving to Backpack if `clojure.core/str` is being a performance problem child
+(defn str
+  ([] "")
+  ([s] s)
+  ([s c] (append s c)))
 
 (defn encode
   "Main polyline encoding function. Takes a collection of [lat long]

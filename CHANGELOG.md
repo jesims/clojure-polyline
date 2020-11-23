@@ -4,4 +4,4 @@ Changed:
 
 * Added `bindle` subproject
 * Updated helper bash script
-* Using `transient` vector in place of `StringBuilder` for ClojureScript
+* Using `cljs.core/+` for string concatenation to avoid join calls
