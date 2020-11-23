@@ -21,8 +21,6 @@
                              :aliases]}
   :dependencies [[org.clojure/clojure]]
   :profiles {:dev [:parent/dev {:dependencies [[thheller/shadow-cljs]
+                                               [io.jesi/customs]
                                                [org.clojure/clojurescript]
-                                               [org.clojure/tools.namespace "0.2.11"]]}]}
-  :aliases {"node-test" ["do"
-                         "run" "-m" "shadow.cljs.devtools.cli" "release" "test,"
-                         "shell" "node" "target/node/test.js"]})
+                                               [org.clojure/tools.namespace "1.0.0"]]}]})

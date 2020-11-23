@@ -16,24 +16,22 @@ clean () {
 ## deps:
 ## Installs all required dependencies for Clojure and ClojureScript
 deps () {
-	echo-message 'Installing dependencies'
-	lein deps
-	abort-on-error
+	-deps
 }
 
-## unit-test:
+## test:
 ## Runs the Clojure unit tests
-unit-test () {
+test () {
 	clean
-	lein test
+	-test-clj "$@"
 	abort-on-error 'Clojure tests failed'
 }
 
-## unit-test-cljs:
+## test-cljs:
 ## Runs the ClojureScript unit tests
-unit-test-cljs () {
+test-cljs () {
 	clean
-	lein node-test
+	-test-cljs "$@"
 	abort-on-error 'ClojureScript tests failed'
 }
 
@@ -85,6 +83,11 @@ release () {
 ## lint:
 lint () {
 	-lint
+}
+
+## outdated:
+outdated () {
+	-outdated
 }
 
 script-invoke "$@"

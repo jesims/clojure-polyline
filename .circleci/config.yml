@@ -37,7 +37,7 @@ jobs:
     - checkout
     - restore_cache:
         <<: *LEIN_CACHE
-    - run: './clojure-polyline.sh unit-test'
+    - run: './clojure-polyline.sh test'
     - save_cache:
         <<: *LEIN_CACHE
   test_cljs:
@@ -47,7 +47,7 @@ jobs:
     - checkout
     - restore_cache:
         <<: *LEIN_CACHE
-    - run: './clojure-polyline.sh unit-test-cljs'
+    - run: './clojure-polyline.sh test-cljs'
     - save_cache:
         <<: *LEIN_CACHE
   snapshot:

@@ -1,6 +1,6 @@
 (ns com.michaelgaare.clojure-polyline-test
   (:require
-    [clojure.test :refer [deftest is testing]]
+    [io.jesi.customs.strict :refer [deftest is testing]]
     [com.michaelgaare.clojure-polyline :as polyline]))
 
 (defn- round [d]
