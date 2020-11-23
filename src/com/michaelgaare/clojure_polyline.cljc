@@ -20,21 +20,23 @@
    CLJS: Appends a character to the string."
   [sb c]
   #?(:clj  (.append ^StringBuilder sb c)
-     :cljs (conj! sb c)))
+     :cljs (do
+             (.push sb c)
+             sb)))
 
 (defn- sb->str
   "CLJ: Converts the StringBuilder to a string.
    CLJS: Returns the given string"
   [sb]
   #?(:clj  (.toString ^StringBuilder sb)
-     :cljs (apply str (persistent! sb))))
+     :cljs (.join sb "")))
 
 (defn- string-builder
   "CLJ: Returns a new StringBuilder.
    CLJS: Returns an empty string."
   []
   #?(:clj  (StringBuilder.)
-     :cljs (transient [])))
+     :cljs #js []))
 
 ;; -------------------------------------------------------
 ;; Utility functions

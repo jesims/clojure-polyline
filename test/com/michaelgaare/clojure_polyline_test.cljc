@@ -1,6 +1,6 @@
 (ns com.michaelgaare.clojure-polyline-test
   (:require
-    [io.jesi.customs.strict :refer [deftest is testing]]
+    [io.jesi.customs.strict :refer [deftest is is= testing]]
     [com.michaelgaare.clojure-polyline :as polyline]))
 
 (defn- round [d]
@@ -17,14 +17,14 @@
 (def encoded "_p~iF~ps|U_ulLnnqC_mqNvxq`@")
 
 (deftest test-encoding
-  (is (= encoded (polyline/encode coords))))
+  (is= encoded (polyline/encode coords)))
 
 (deftest test-decoding
-  (is (= coords (polyline/decode encoded))))
+  (is= coords (polyline/decode encoded)))
 
 (deftest test-round-trip
   (let [round (polyline/decode (polyline/encode coords))]
-    (is (= coords round))))
+    (is= coords round)))
 
 (deftest generative-round-trip
   (let [coords (repeatedly 2000 rand-lat-lon)
@@ -33,9 +33,9 @@
     (testing "Coordinates are round to 5 dp during encoding"
       (let [encoded-coords (polyline/encode coords)
             encoded-rounded (polyline/encode rounded)]
-        (is (= encoded-coords encoded-rounded))))
+        (is= encoded-coords encoded-rounded)))
 
     (testing "the decoded results are to 5dp"
       (let [actual (-> coords polyline/encode polyline/decode)]
         (is (not= coords actual))
-        (is (= rounded actual))))))
+        (is= rounded actual)))))
