@@ -1,12 +1,8 @@
 #!/usr/bin/env bash
-cd $(realpath $(dirname $0))
-# TODO: Source and load from common repository
-if [ ! -f ./project.sh ]; then
-	echo "Downloading bash helper utilities"
-	curl -OL https://raw.githubusercontent.com/jesims/backpack/master/project.sh
-fi
-source ./project.sh
-if [[ $? -ne 0 ]]; then
+#shellcheck disable=2215
+cd "$(realpath "$(dirname "$0")")" &&
+source bindle/project.sh
+if [ $? -ne 0 ];then
 	exit 1
 fi
 
@@ -20,25 +16,23 @@ clean () {
 ## deps:
 ## Installs all required dependencies for Clojure and ClojureScript
 deps () {
-	echo_message 'Installing dependencies'
-	lein deps
-	abort_on_error
+	-deps
 }
 
-## unit-test:
+## test:
 ## Runs the Clojure unit tests
-unit-test () {
+test () {
 	clean
-	lein test
-	abort_on_error 'Clojure tests failed'
+	-test-clj "$@"
+	abort-on-error 'Clojure tests failed'
 }
 
-## unit-test-cljs:
+## test-cljs:
 ## Runs the ClojureScript unit tests
-unit-test-cljs () {
+test-cljs () {
 	clean
-	lein node-test
-	abort_on_error 'ClojureScript tests failed'
+	-test-cljs "$@"
+	abort-on-error 'ClojureScript tests failed'
 }
 
 is-snapshot () {
@@ -49,49 +43,43 @@ is-snapshot () {
 deploy () {
 	if [[ -n "$CIRCLECI" ]];then
 		lein deploy clojars &>/dev/null
-		abort_on_error
+		abort-on-error
 	else
 		lein deploy clojars
-		abort_on_error
+		abort-on-error
 	fi
 }
 
 ## snapshot:
+## args: [-l]
 ## Pushes a snapshot to Clojars
-snapshot () {
-	if is-snapshot;then
-		echo_message 'SNAPSHOT suffix already defined... Aborting'
-		exit 1
-	else
-		version=$(cat VERSION)
-		snapshot="$version-SNAPSHOT"
-		echo ${snapshot} > VERSION
-		echo_message "Snapshotting $snapshot"
-		deploy
-		echo "$version" > VERSION
-	fi
+## [-l] local
+snapshot(){
+	-snapshot "$@"
 }
 
 ## release:
 ## Pushes a release to Clojars
 release () {
-	version=$(cat VERSION)
-	if ! is-snapshot;then
-		version=$(cat VERSION)
-		echo_message "Releasing $version"
-		deploy
-	else
-		echo_message 'SNAPSHOT suffix already defined... Aborting'
-		exit 1
-	fi
+	-release
 }
 
-if [[ "$#" -eq 0 ]] || [[ "$1" =~ ^(help|-h|--help)$ ]];then
-	usage
-	exit 1
-elif [[ $(grep "^$1\ (" "$script_name") ]];then
-	eval $@
-else
-	echo_error "Unknown function $1 ($script_name $@)"
-	exit 1
-fi
+deploy(){
+	deploy-clojars
+}
+
+deploy-snapshot(){
+	deploy-clojars
+}
+
+## lint:
+lint () {
+	-lint
+}
+
+## outdated:
+outdated () {
+	-outdated
+}
+
+script-invoke "$@"

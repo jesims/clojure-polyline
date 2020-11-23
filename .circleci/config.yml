@@ -2,12 +2,12 @@
 version: 2
 aliases:
   cache:
-    lein_cache: &LEIN_CACHE
-      key: lein-{{ checksum "project.clj" }}
+    lein_cache: &CACHE
+      key: cache-{{ .Environment.CACHE_VERSION }}-{{ .Environment.NODE_VERSION }}-{{ checksum "project.clj" }}-{{ checksum "package-lock.json" }}
       paths:
-      - project.sh
       - ~/.lein
       - ~/.m2
+      - node_modules
   containers:
     docker: &DEFAULT
     - image: jesiio/build-bus:latest
@@ -19,57 +19,64 @@ aliases:
       run:
         name: Check & Cancel Redundant Build
         command: 'cancel-redundant-builds.sh'
+    submodule: &SUBMODULE
+      run: git submodule update --init --recursive
 jobs:
   deps:
     docker: *DEFAULT
     steps:
     - *CANCEL_REDUNDANT
     - checkout
+    - *SUBMODULE
     - restore_cache:
-        <<: *LEIN_CACHE
+        <<: *CACHE
     - run: './clojure-polyline.sh deps'
     - save_cache:
-        <<: *LEIN_CACHE
+        <<: *CACHE
   test_clj:
     docker: *DEFAULT
     steps:
     - *CANCEL_REDUNDANT
     - checkout
+    - *SUBMODULE
     - restore_cache:
-        <<: *LEIN_CACHE
-    - run: './clojure-polyline.sh unit-test'
+        <<: *CACHE
+    - run: './clojure-polyline.sh test'
     - save_cache:
-        <<: *LEIN_CACHE
+        <<: *CACHE
   test_cljs:
     docker: *DEFAULT
     steps:
     - *CANCEL_REDUNDANT
     - checkout
+    - *SUBMODULE
     - restore_cache:
-        <<: *LEIN_CACHE
-    - run: './clojure-polyline.sh unit-test-cljs'
+        <<: *CACHE
+    - run: './clojure-polyline.sh test-cljs'
     - save_cache:
-        <<: *LEIN_CACHE
+        <<: *CACHE
   snapshot:
     docker: *DEFAULT
     steps:
     - *CANCEL_REDUNDANT
     - checkout
+    - *SUBMODULE
     - restore_cache:
-        <<: *LEIN_CACHE
+        <<: *CACHE
     - run: './clojure-polyline.sh snapshot'
     - save_cache:
-        <<: *LEIN_CACHE
+        <<: *CACHE
   release:
     docker: *DEFAULT
     steps:
     - *CANCEL_REDUNDANT
     - checkout
+    - *SUBMODULE
     - restore_cache:
-        <<: *LEIN_CACHE
+        <<: *CACHE
     - run: './clojure-polyline.sh release'
     - save_cache:
-        <<: *LEIN_CACHE
+        <<: *CACHE
 workflows:
   version: 2
   build:

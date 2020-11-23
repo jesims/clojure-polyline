@@ -7,15 +7,19 @@
             :url          "http://www.eclipse.org/legal/epl-v10.html"
             :distribution :repo
             :comments     "same as Clojure"}
-  :plugins [[lein-parent "0.3.5"]]
-  :parent-project {:coords  [io.jesi/parent "0.0.2"]
-                   :inherit [:plugins :managed-dependencies :deploy-repositories :dependencies :exclusions [:profiles :dev]]}
+  :plugins [[lein-parent "0.3.8"]]
+  :parent-project {:coords  [io.jesi/parent "4.3.0"]
+                   :inherit [:plugins
+                             :repositories
+                             :deploy-repositories
+                             :managed-dependencies
+                             :dependencies
+                             :exclusions
+                             :profiles
+                             :global-vars
+                             :aliases]}
   :dependencies [[org.clojure/clojure]]
-  :profiles {:dev {:dependencies [[org.clojure/clojurescript]
-                                  [org.clojure/tools.namespace "0.2.11"]
-                                  [thheller/shadow-cljs]]
-                   :plugins      [[lein-shell "0.5.0"]]
-                   :source-paths ["dev"]}}
-  :aliases {"node-test" ["do"
-                         "run" "-m" "shadow.cljs.devtools.cli" "release" "test,"
-                         "shell" "node" "target/node/test.js"]})
+  :profiles {:dev [:parent/dev {:dependencies [[thheller/shadow-cljs]
+                                               [io.jesi/customs]
+                                               [org.clojure/clojurescript]
+                                               [org.clojure/tools.namespace "1.0.0"]]}]})
