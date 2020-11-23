@@ -19,12 +19,15 @@ aliases:
       run:
         name: Check & Cancel Redundant Build
         command: 'cancel-redundant-builds.sh'
+    submodule: &SUBMODULE
+      run: git submodule update --init --recursive
 jobs:
   deps:
     docker: *DEFAULT
     steps:
     - *CANCEL_REDUNDANT
     - checkout
+    - *SUBMODULE
     - restore_cache:
         <<: *LEIN_CACHE
     - run: './clojure-polyline.sh deps'
@@ -35,6 +38,7 @@ jobs:
     steps:
     - *CANCEL_REDUNDANT
     - checkout
+    - *SUBMODULE
     - restore_cache:
         <<: *LEIN_CACHE
     - run: './clojure-polyline.sh test'
@@ -45,6 +49,7 @@ jobs:
     steps:
     - *CANCEL_REDUNDANT
     - checkout
+    - *SUBMODULE
     - restore_cache:
         <<: *LEIN_CACHE
     - run: './clojure-polyline.sh test-cljs'
@@ -55,6 +60,7 @@ jobs:
     steps:
     - *CANCEL_REDUNDANT
     - checkout
+    - *SUBMODULE
     - restore_cache:
         <<: *LEIN_CACHE
     - run: './clojure-polyline.sh snapshot'
@@ -65,6 +71,7 @@ jobs:
     steps:
     - *CANCEL_REDUNDANT
     - checkout
+    - *SUBMODULE
     - restore_cache:
         <<: *LEIN_CACHE
     - run: './clojure-polyline.sh release'
