@@ -16,9 +16,9 @@ clean () {
 ## deps:
 ## Installs all required dependencies for Clojure and ClojureScript
 deps () {
-	echo_message 'Installing dependencies'
+	echo-message 'Installing dependencies'
 	lein deps
-	abort_on_error
+	abort-on-error
 }
 
 ## unit-test:
@@ -26,7 +26,7 @@ deps () {
 unit-test () {
 	clean
 	lein test
-	abort_on_error 'Clojure tests failed'
+	abort-on-error 'Clojure tests failed'
 }
 
 ## unit-test-cljs:
@@ -34,7 +34,7 @@ unit-test () {
 unit-test-cljs () {
 	clean
 	lein node-test
-	abort_on_error 'ClojureScript tests failed'
+	abort-on-error 'ClojureScript tests failed'
 }
 
 is-snapshot () {
@@ -45,10 +45,10 @@ is-snapshot () {
 deploy () {
 	if [[ -n "$CIRCLECI" ]];then
 		lein deploy clojars &>/dev/null
-		abort_on_error
+		abort-on-error
 	else
 		lein deploy clojars
-		abort_on_error
+		abort-on-error
 	fi
 }
 
@@ -56,13 +56,13 @@ deploy () {
 ## Pushes a snapshot to Clojars
 snapshot () {
 	if is-snapshot;then
-		echo_message 'SNAPSHOT suffix already defined... Aborting'
+		echo-message 'SNAPSHOT suffix already defined... Aborting'
 		exit 1
 	else
 		version=$(cat VERSION)
 		snapshot="$version-SNAPSHOT"
 		echo "${snapshot}" > VERSION
-		echo_message "Snapshotting $snapshot"
+		echo-message "Snapshotting $snapshot"
 		deploy
 		echo "$version" > VERSION
 	fi
@@ -74,10 +74,10 @@ release () {
 	version=$(cat VERSION)
 	if ! is-snapshot;then
 		version=$(cat VERSION)
-		echo_message "Releasing $version"
+		echo-message "Releasing $version"
 		deploy
 	else
-		echo_message 'SNAPSHOT suffix already defined... Aborting'
+		echo-message 'SNAPSHOT suffix already defined... Aborting'
 		exit 1
 	fi
 }
