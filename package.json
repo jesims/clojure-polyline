@@ -1,0 +1,28 @@
+{
+  "name": "y",
+  "version": "1.0.0",
+  "description": "Decoding and encoding of the google polyline algorithm as described at https://developers.google.com/maps/documentation/utilities/polylinealgorithm",
+  "main": "",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "remark-toc": "^7.0.0"
+  },
+  "devDependencies": {
+    "ws": "^7.4.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jesims/clojure-polyline.git"
+  },
+  "author": "",
+  "license": "Eclipse Public License V1.0",
+  "bugs": {
+    "url": "https://github.com/jesims/clojure-polyline/issues"
+  },
+  "homepage": "https://github.com/jesims/clojure-polyline#readme"
+}
